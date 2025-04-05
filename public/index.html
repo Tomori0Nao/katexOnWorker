@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Hello, World!</title>
+	</head>
+	<body>
+		<h1 id="heading"></h1>
+		<button id="button" type="button">Fetch a random UUID</button>
+		<output id="random" for="button"></output>
+		<output id="markdown" for="button"></output>
+		<script>
+			fetch('/message')
+				.then((resp) => resp.text())
+				.then((text) => {
+					const h1 = document.getElementById('heading');
+					h1.textContent = text;
+				});
+
+			const button = document.getElementById("button");
+			button.addEventListener("click", () => {
+
+				let hearder = {
+					"Content-Type": "application/json"
+				}
+				let data = {data:"这是一个内联公式：\( E = mc^2 \)。"}
+				fetch('/markdown', { method: 'POST' ,headers:hearder, body: JSON.stringify(data)})
+					.then((resp) => {
+						console.log(resp);
+						return resp.text();
+					})
+					.then((text) => {
+						const markdown = document.getElementById('markdown');
+						markdown.innerHTML = text;
+					}
+					);
+			});
+		</script>
+	</body>
+</html>
